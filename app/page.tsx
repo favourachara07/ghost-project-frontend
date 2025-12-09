@@ -120,7 +120,7 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/verify", {
+      const response = await fetch("https://ghost-project-backend.onrender.com/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -202,7 +202,7 @@ export default function Home() {
             <select 
               value={formData.project_type}
               onChange={(e) => setFormData({...formData, project_type: e.target.value})}
-              className="p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 min-w-[200px]"
+              className="p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-black text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 min-w-[200px]"
             >
               <optgroup label="🏗️ Infrastructure">
                 <option value="Road">Road Construction</option>
