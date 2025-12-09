@@ -190,19 +190,22 @@ useEffect(() => {
       <div ref={mapContainerRef} className="absolute inset-0 w-full h-full" />
 
       {/* Compact Top Bar - Single Row */}
+      {/* RESPONSIVE TOP BAR */}
       <div 
-        className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 transition-all duration-500"
+        className="absolute top-4 left-4 right-4 md:left-1/2 md:right-auto md:transform md:-translate-x-1/2 z-10 transition-all duration-500"
         style={{
           opacity: showResults ? 0 : 1,
           pointerEvents: showResults ? "none" : "auto",
         }}
       >
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl px-6 py-3">
-          <div className="flex items-center gap-4">
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-4 md:px-6 md:py-3 w-full md:w-auto">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4">
+            
             <select 
               value={formData.project_type}
               onChange={(e) => setFormData({...formData, project_type: e.target.value})}
-              className="p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-black text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 min-w-[200px]"
+              // Added w-full for mobile
+              className="p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-black text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full md:min-w-[200px]"
             >
               <optgroup label="🌊 Environmental">
                 <option value="Oil Spill Remediation">Oil Spill Cleanup</option>
@@ -212,31 +215,34 @@ useEffect(() => {
                 <option value="Building">Building / School</option>
                 <option value="Factory">Industrial Facility</option>
               </optgroup>
-              
             </select>
 
-            <input 
-              type="number" 
-              step="0.0001"
-              value={formData.latitude}
-              onChange={(e) => setFormData({...formData, latitude: e.target.value})}
-              placeholder="Latitude"
-              className="w-32 p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-white/40"
-            />
+            <div className="flex gap-2 w-full md:w-auto">
+                <input 
+                  type="number" 
+                  step="0.0001"
+                  value={formData.latitude}
+                  onChange={(e) => setFormData({...formData, latitude: e.target.value})}
+                  placeholder="Latitude"
+                  // Added flex-1 and w-full for mobile sizing
+                  className="flex-1 w-full md:w-32 p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-white/40"
+                />
 
-            <input 
-              type="number" 
-              step="0.0001"
-              value={formData.longitude}
-              onChange={(e) => setFormData({...formData, longitude: e.target.value})}
-              placeholder="Longitude"
-              className="w-32 p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-white/40"
-            />
+                <input 
+                  type="number" 
+                  step="0.0001"
+                  value={formData.longitude}
+                  onChange={(e) => setFormData({...formData, longitude: e.target.value})}
+                  placeholder="Longitude"
+                  // Added flex-1 and w-full for mobile sizing
+                  className="flex-1 w-full md:w-32 p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-white/40"
+                />
+            </div>
 
             <button 
               onClick={handleVerify}
               disabled={loading}
-              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold px-6 py-2.5 rounded-lg transition-all shadow-lg shadow-cyan-500/50 disabled:opacity-50 whitespace-nowrap"
+              className="w-full md:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold px-6 py-2.5 rounded-lg transition-all shadow-lg shadow-cyan-500/50 disabled:opacity-50 whitespace-nowrap"
             >
               {loading ? " Analyzing..." : " Verify"}
             </button>
@@ -293,80 +299,73 @@ useEffect(() => {
       )}
 
       {/* Results Panel */}
+      {/* RESPONSIVE RESULTS PANEL */}
       {showResults && result && (
         <div 
-          className="absolute top-8 right-8 z-10 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-6 w-96"
+          className="fixed bottom-0 left-0 right-0 md:absolute md:top-8 md:right-8 md:bottom-auto md:left-auto z-30 backdrop-blur-xl bg-black/40 md:bg-white/10 border-t md:border border-white/20 rounded-t-3xl md:rounded-2xl shadow-2xl p-6 w-full md:w-96 max-h-[85vh] overflow-y-auto"
           style={{
-            animation: "slideInRight 0.5s ease-out",
+            animation: typeof window !== 'undefined' && window.innerWidth < 768 ? "slideUp 0.5s ease-out" : "slideInRight 0.5s ease-out",
           }}
         >
-          <button 
-            onClick={resetView}
-            className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl leading-none"
-          >
-            ×
-          </button>
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <Satellite className="w-6 h-6 text-cyan-400" />
+              Analysis Complete
+            </h2>
+            <button 
+              onClick={resetView}
+              className="text-white/60 hover:text-white transition-colors"
+            >
+              ✕
+            </button>
+          </div>
 
-          <div className={`mb-4 pb-4 border-b ${
-            result.satellite_analysis.risk_flag 
-              ? "border-red-500/50" 
-              : "border-green-500/50"
+          {/* Verdict */}
+          <div className={`p-4 rounded-xl border-2 mb-4 ${
+            result.satellite_analysis?.risk_flag 
+              ? 'bg-red-500/20 border-red-500/50' 
+              : 'bg-green-500/20 border-green-500/50'
           }`}>
             <div className="flex items-center gap-3 mb-2">
-              {result.satellite_analysis.risk_flag ? (
-                formData.project_type === "Oil Spill Remediation" ? (
-                  <Droplets className="w-10 h-10 text-red-400" />
-                ) : (
-                  <AlertTriangle className="w-10 h-10 text-red-400" />
-                )
+              {result.satellite_analysis?.risk_flag ? (
+                <AlertTriangle className="w-8 h-8 text-red-400" />
               ) : (
-                <CheckCircle className="w-10 h-10 text-green-400" />
+                <CheckCircle className="w-8 h-8 text-green-400" />
               )}
-              
-              <div>
-                <h2 className={`text-2xl font-black ${
-                  result.satellite_analysis.risk_flag 
-                    ? "text-red-400" 
-                    : "text-green-400"
-                }`}>
-                  {result.satellite_analysis.verdict}
-                </h2>
-                <p className="text-xs text-white/60 font-mono">
-                  {result.satellite_analysis.model_used || "ResNet50_v1"}
-                </p>
-              </div>
+              <span className="text-2xl font-bold text-white">
+                {result.satellite_analysis?.verdict}
+              </span>
+            </div>
+            <p className="text-sm text-white/80">{result.satellite_analysis?.reason}</p>
+          </div>
+
+          {/* Metrics */}
+          <div className="space-y-3 mb-4">
+            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+              <span className="text-white/60 text-sm">NDVI Index</span>
+              <span className="text-white font-mono font-bold">
+                {result.satellite_analysis?.calculated_index?.toFixed(3)}
+              </span>
             </div>
             
-            <p className="text-sm text-white/90 mt-3">
-              {result.satellite_analysis.reason}
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <div className="bg-white/5 rounded-xl p-3">
-              <div className="flex items-center gap-2 mb-1">
-                <Activity className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs font-semibold uppercase text-white/70">NDVI Index</span>
-              </div>
-              <div className="text-2xl font-mono font-bold text-white">
-                {result.satellite_analysis.calculated_index?.toFixed(4) ?? "N/A"}
-              </div>
+            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+              <span className="text-white/60 text-sm">Location</span>
+              <span className="text-white font-mono text-xs">
+                {result.location?.lat?.toFixed(4)}, {result.location?.lon?.toFixed(4)}
+              </span>
             </div>
 
-            <div className="bg-white/5 rounded-xl p-3">
-              <div className="flex items-center gap-2 mb-1">
-                <MapPin className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs font-semibold uppercase text-white/70">Coordinates</span>
-              </div>
-              <div className="text-sm font-mono text-white/90">
-                {result.location.lat.toFixed(4)}, {result.location.lon.toFixed(4)}
-              </div>
+            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+              <span className="text-white/60 text-sm">AI Model</span>
+              <span className="text-white text-xs">{result.satellite_analysis?.model_used}</span>
             </div>
           </div>
 
-          <button
+          {/* Action Button */}
+          <button 
             onClick={resetView}
-            className="w-full mt-4 bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all border border-white/20"
+            className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold px-6 py-3 rounded-lg transition-all shadow-lg shadow-cyan-500/50 mb-8 md:mb-0"
           >
             ← Return to Globe
           </button>
@@ -385,14 +384,12 @@ useEffect(() => {
 
       <style jsx>{`
         @keyframes slideInRight {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
         }
       `}</style>
     </div>
