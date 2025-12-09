@@ -20,7 +20,7 @@ export default function Home() {
     project_id: "OL-RD-2025-001",
     latitude: "5.9667",
     longitude: "5.6667",
-    project_type: "Road",
+    project_type: "Oil Spill Remediation",
   });
 
   const [loading, setLoading] = useState(false);
@@ -76,20 +76,20 @@ export default function Home() {
   }, []);
 
   // Auto-rotation effect
-  useEffect(() => {
-    if (!mapRef.current || !isRotating) return;
+useEffect(() => {
+  if (!mapRef.current || !mapLoaded || !isRotating) return;
 
-    const rotate = () => {
-      if (mapRef.current && isRotating) {
-        const center = mapRef.current.getCenter();
-        center.lng -= 0.05;
-        mapRef.current.easeTo({ center, duration: 100, easing: (t: number) => t });
-      }
-    };
+  const rotate = () => {
+    if (mapRef.current && isRotating) {
+      const center = mapRef.current.getCenter();
+      center.lng -= 0.2;
+      mapRef.current.easeTo({ center, duration: 100, easing: (t: number) => t });
+    }
+  };
 
-    const interval = setInterval(rotate, 100);
-    return () => clearInterval(interval);
-  }, [isRotating]);
+  const interval = setInterval(rotate, 50);
+  return () => clearInterval(interval);
+}, [isRotating, mapLoaded]);
 
   const handleVerify = async () => {
     setLoading(true);
@@ -204,14 +204,15 @@ export default function Home() {
               onChange={(e) => setFormData({...formData, project_type: e.target.value})}
               className="p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-black text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 min-w-[200px]"
             >
+              <optgroup label="🌊 Environmental">
+                <option value="Oil Spill Remediation">Oil Spill Cleanup</option>
+              </optgroup>
               <optgroup label="🏗️ Infrastructure">
                 <option value="Road">Road Construction</option>
                 <option value="Building">Building / School</option>
                 <option value="Factory">Industrial Facility</option>
               </optgroup>
-              <optgroup label="🌊 Environmental">
-                <option value="Oil Spill Remediation">Oil Spill Cleanup</option>
-              </optgroup>
+              
             </select>
 
             <input 
