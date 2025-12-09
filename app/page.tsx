@@ -42,33 +42,45 @@ export default function Home() {
     document.head.appendChild(link);
 
     script.onload = () => {
-      if (!mapContainerRef.current) return;
+  if (!mapContainerRef.current) return;
 
-      // Use a public Mapbox token for demo purposes
-      window.mapboxgl.accessToken = "pk.eyJ1IjoiZmF2b3VyYWNoYXJhIiwiYSI6ImNtaXhweHBsNTA2dnUzanNrbWpnZTBkcTMifQ.FvD15f-8u19kmBPP2Z2WIA";
+  window.mapboxgl.accessToken = "pk.eyJ1IjoiZmF2b3VyYWNoYXJhIiwiYSI6ImNtaXhweHBsNTA2dnUzanNrbWpnZTBkcTMifQ.FvD15f-8u19kmBPP2Z2WIA";
 
-      const map = new window.mapboxgl.Map({
-        container: mapContainerRef.current,
-        style: "mapbox://styles/mapbox/satellite-streets-v12",
-        projection: "globe",
-        zoom: 1.5,
-        center: [0, 20],
-        pitch: 0,
-      });
+  const map = new window.mapboxgl.Map({
+    container: mapContainerRef.current,
+    style: "mapbox://styles/mapbox/satellite-streets-v12",
+    projection: "globe",
+    zoom: 1.5,
+    center: [0, 20],
+    pitch: 0,
+  });
 
-      map.on("load", () => {
-        setMapLoaded(true);
-        map.setFog({
-          color: "rgb(186, 210, 235)",
-          "high-color": "rgb(36, 92, 223)",
-          "horizon-blend": 0.02,
-          "space-color": "rgb(11, 11, 25)",
-          "star-intensity": 0.6,
-        });
-      });
+  map.on("load", () => {
+    setMapLoaded(true);
+    map.setFog({
+      color: "rgb(186, 210, 235)",
+      "high-color": "rgb(36, 92, 223)",
+      "horizon-blend": 0.02,
+      "space-color": "rgb(11, 11, 25)",
+      "star-intensity": 0.6,
+    });
 
-      mapRef.current = map;
-    };
+    // STOP ROTATION WHEN USER INTERACTS
+    map.on("mousedown", () => setIsRotating(false));
+    map.on("touchstart", () => setIsRotating(false));
+    map.on("wheel", () => setIsRotating(false));
+    
+    // RESUME ROTATION AFTER USER STOPS INTERACTING (OPTIONAL)
+    map.on("mouseup", () => {
+      setTimeout(() => setIsRotating(true), 2000);
+    });
+    map.on("touchend", () => {
+      setTimeout(() => setIsRotating(true), 2000);
+    });
+  });
+
+  mapRef.current = map;
+};
 
     return () => {
       if (mapRef.current) mapRef.current.remove();
@@ -205,7 +217,7 @@ useEffect(() => {
               value={formData.project_type}
               onChange={(e) => setFormData({...formData, project_type: e.target.value})}
               // Added w-full for mobile
-              className="p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-black text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full md:min-w-[200px]"
+              className="p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full md:min-w-[200px]"
             >
               <optgroup label="🌊 Environmental">
                 <option value="Oil Spill Remediation">Oil Spill Cleanup</option>
