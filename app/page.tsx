@@ -44,7 +44,7 @@ export default function Home() {
     script.onload = () => {
   if (!mapContainerRef.current) return;
 
-  window.mapboxgl.accessToken = "pk.eyJ1IjoiZmF2b3VyYWNoYXJhIiwiYSI6ImNtaXhweHBsNTA2dnUzanNrbWpnZTBkcTMifQ.FvD15f-8u19kmBPP2Z2WIA";
+  window.mapboxgl.accessToken = "pk.eyJ1IjoiZmF2b3VyYWNoYXJhIiwiYSI6ImNtajBpZTRlODA3eXgzY3F3dzN0Ym1kNGYifQ.go9jklJkqZTpsax79NnKRg";
 
   const map = new window.mapboxgl.Map({
     container: mapContainerRef.current,
